@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KU Entry Test Practice – BBA / BSPA</title>
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--ink:#14213d;--mute:#5d6b82;--acc:#0b6e4f;--acc2:#e8f3ee;--bad:#b3261e;--line:#d8e0ea;--star:#c27c0e}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1621;--card:#18212f;--ink:#e8edf5;--mute:#9aa8bd;--acc:#3fb88a;--acc2:#16322a;--bad:#ff8a80;--line:#2a3547;--star:#f0b44c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.6rem;margin:8px 0}h2{font-size:1.2rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--acc);background:var(--acc);color:#fff;padding:10px 16px;margin:4px 4px 4px 0}
+button.ghost{background:transparent;color:var(--acc)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--star);outline-offset:2px}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);margin:6px 0}
+.opt.sel{border-color:var(--acc);background:var(--acc2)}
+.opt.ok{border-color:var(--acc);background:var(--acc2)}
+.opt.no{border-color:var(--bad)}
+.bar{position:sticky;top:0;background:var(--bg);padding:8px 0;display:flex;justify-content:space-between;align-items:center;z-index:5;border-bottom:1px solid var(--line)}
+.timer{font-size:1.3rem;font-weight:bold}.timer.low{color:var(--bad)}
+.tag{font-size:.8rem;color:var(--mute)}.star{color:var(--star)}
+.nav{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.nav button{padding:4px 8px;margin:0;background:var(--card);color:var(--ink);border-color:var(--line);font-size:.85rem}
+.nav button.done{background:var(--acc2);border-color:var(--acc)}
+.nav button.cur{outline:2px solid var(--star)}
+input,select{font:inherit;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.big{font-size:2.4rem;font-weight:bold;color:var(--acc)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+/* Format: [subject, question, [A,B,C,D], correctIndex (0=A..3=D), expected (1 = likely this year, 0 = normal)] */
+window.EXTRA=(window.EXTRA||[]).concat([
+// ---- GK ----
+["GK","National flower of Pakistan?",["Jasmine","Rose","Tulip","Lotus"],0,1],
+["GK","National animal of Pakistan?",["Lion","Markhor","Tiger","Deer"],1,1],
+["GK","Pakistan became a republic in?",["1947","1956","1962","1973"],1,1],
+["GK","The current Constitution of Pakistan was adopted in?",["1956","1962","1973","1985"],2,1],
+["GK","First Prime Minister of Pakistan?",["Liaquat Ali Khan","Khawaja Nazimuddin","Iskander Mirza","Z.A. Bhutto"],0,1],
+["GK","Largest city of Pakistan?",["Lahore","Karachi","Islamabad","Faisalabad"],1,0],
+["GK","Pakistan's southern coast lies on the?",["Red Sea","Arabian Sea","Black Sea","Caspian Sea"],1,0],
+["GK","Capital of Balochistan?",["Quetta","Gwadar","Sukkur","Hyderabad"],0,0],
+["GK","The Khyber Pass connects Pakistan with?",["Iran","China","Afghanistan","India"],2,1],
+["GK","First man to walk on the moon?",["Yuri Gagarin","Neil Armstrong","Buzz Aldrin","Alan Shepard"],1,0],
+["GK","Capital of Saudi Arabia?",["Jeddah","Makkah","Riyadh","Dammam"],2,0],
+["GK","Capital of Turkey?",["Istanbul","Ankara","Izmir","Bursa"],1,0],
+["GK","Largest country of the world by area?",["China","USA","Russia","Canada"],2,0],
+["GK","National sport of Pakistan?",["Cricket","Field hockey","Football","Squash"],1,1],
+["GK","Youngest Nobel Prize winner, from Pakistan?",["Malala Yousafzai","Benazir Bhutto","Fatima Jinnah","Abdus Salam"],0,1],
+["GK","Planet known as the Red Planet?",["Venus","Mars","Mercury","Jupiter"],1,0],
+["GK","IMF stands for?",["International Monetary Fund","Internal Money Fund","International Market Fund","Island Monetary Federation"],0,1],
+["GK","Mangla Dam is built on river?",["Indus","Jhelum","Ravi","Sutlej"],1,0],
+["GK","Tarbela Dam is built on river?",["Indus","Jhelum","Chenab","Kabul"],0,1],
+["GK","Pakistan conducted its nuclear tests in?",["1974","1990","1998","2001"],2,1],
+// ---- English ----
+["English","Synonym of 'Brave'?",["Timid","Courageous","Lazy","Silent"],1,1],
+["English","Antonym of 'Expand'?",["Grow","Contract","Stretch","Widen"],1,1],
+["English","Synonym of 'Huge'?",["Tiny","Enormous","Narrow","Weak"],1,0],
+["English","Antonym of 'Transparent'?",["Clear","Opaque","Thin","Bright"],1,1],
+["English","She ___ like tea.",["don't","doesn't","not","isn't"],1,1],
+["English","I ___ my homework already.",["have finished","has finished","finish","am finish"],0,1],
+["English","The teacher, along with the students, ___ coming.",["are","is","were","have"],1,1],
+["English","He is good ___ mathematics.",["in","at","on","for"],1,1],
+["English","Fear of heights is called?",["Claustrophobia","Acrophobia","Hydrophobia","Xenophobia"],1,1],
+["English","'Once in a blue moon' means?",["Very often","Very rarely","At night","Every month"],1,1],
+["English","Plural of 'Mouse'?",["Mouses","Mice","Mices","Mouse"],1,0],
+["English","'Benevolent' means?",["Cruel","Kind","Lazy","Angry"],1,1],
+["English","Past participle of 'Choose'?",["Chose","Choosed","Chosen","Choosing"],2,1],
+["English","Opposite of 'Optimist'?",["Pessimist","Realist","Idealist","Egoist"],0,1],
+["English","Hardly had he arrived ___ it started raining.",["than","when","then","as"],1,0],
+["English","Comparative of 'Good'?",["Gooder","Better","Best","More good"],1,0],
+["English","Synonym of 'Reluctant'?",["Eager","Unwilling","Happy","Ready"],1,0],
+["English","A person who writes books is a/an?",["Editor","Author","Reader","Critic"],1,0],
+["English","'A piece of cake' means?",["A dessert","Very easy","Very costly","A gift"],1,1],
+["English","One who walks in sleep is called?",["Somnambulist","Insomniac","Pedestrian","Sleeper"],0,0],
+// ---- Accounting ----
+["Accounting","Cash account increases on the ___ side.",["Debit","Credit","Both","Neither"],0,1],
+["Accounting","Purchase returns are also called?",["Returns inward","Returns outward","Sales returns","Discounts"],1,1],
+["Accounting","Sales returns are also called?",["Returns inward","Returns outward","Purchases","Drawings"],0,1],
+["Accounting","Accrued expenses are expenses that are?",["Paid in advance","Incurred but not yet paid","Never paid","Capital items"],1,1],
+["Accounting","Prepaid expenses are shown as?",["Current liability","Current asset","Income","Capital"],1,1],
+["Accounting","Bad debts are treated as?",["Asset","Expense/loss","Capital","Income"],1,1],
+["Accounting","Furniture bought on credit: debit furniture, credit?",["Cash","Creditor","Capital","Sales"],1,1],
+["Accounting","Straight-line depreciation = ?",["(Cost - Scrap) / Life","Cost x Life","Cost / Scrap","(Cost + Scrap) / Life"],0,1],
+["Accounting","Bank reconciliation statement reconciles?",["Cash book and pass book","Ledger and journal","Stock and sales","Debtors and creditors"],0,1],
+["Accounting","Net Profit = ?",["Gross Profit - Operating Expenses","Gross Profit + Expenses","Sales - Purchases","Capital - Drawings"],0,1],
+["Accounting","A balance sheet shows financial position at?",["A period","A particular date","A year-end only for sole traders","Any random time"],1,1],
+["Accounting","Which is a nominal account?",["Cash a/c","Salary a/c","Furniture a/c","Debtors a/c"],1,1],
+["Accounting","Going concern concept assumes the business will?",["Close soon","Continue operating","Be sold","Be merged"],1,0],
+["Accounting","Current ratio = ?",["CA / CL","CL / CA","Assets / Capital","Profit / Sales"],0,1],
+["Accounting","Carriage inwards is debited to?",["Trading account","Balance sheet","Capital account","Drawings"],0,0],
+// ---- Business Math ----
+["Business Math","15% of 200 = ?",["20","30","40","15"],1,1],
+["Business Math","Compound interest on Rs 1000 at 10% for 2 years?",["200","210","220","100"],1,1],
+["Business Math","If x/4 = 5, then x = ?",["9","20","1.25","16"],1,1],
+["Business Math","LCM of 4 and 6?",["12","24","2","10"],0,1],
+["Business Math","HCF of 12 and 18?",["3","6","9","36"],1,1],
+["Business Math","Cost price 500, profit 20%. Selling price?",["520","550","600","700"],2,1],
+["Business Math","Average of first 10 natural numbers?",["5","5.5","6","10"],1,0],
+["Business Math","5! = ?",["25","60","120","720"],2,1],
+["Business Math","4P2 = ?",["6","8","12","24"],2,1],
+["Business Math","Roots of x² - 5x + 6 = 0?",["1 and 6","2 and 3","-2 and -3","5 and 1"],1,1],
+["Business Math","Next term: 2, 4, 8, 16, ?",["24","30","32","20"],2,1],
+["Business Math","log 2 + log 3 = ?",["log 5","log 6","log 1","2 log 3"],1,1],
+["Business Math","0.25 as a fraction?",["1/2","1/4","1/5","2/5"],1,0],
+["Business Math","Rs 1000 divided in ratio 2:3. Larger share?",["400","500","600","700"],2,0],
+["Business Math","At 10% simple interest, money doubles in?",["5 years","10 years","15 years","20 years"],1,1],
+// ---- Economics ----
+["Economics","Law of supply: when price rises, supply?",["Falls","Rises","Stays same","Vanishes"],1,1],
+["Economics","Price elasticity of demand = ?",["%ΔQ / %ΔP","%ΔP / %ΔQ","ΔQ x ΔP","P / Q"],0,1],
+["Economics","Fiscal policy deals with?",["Interest rates only","Government taxes and spending","Exchange rate only","Bank deposits"],1,1],
+["Economics","Monetary policy is controlled by the?",["Central bank","Ministry of Education","Courts","Stock exchange"],0,1],
+["Economics","Scarcity arises because?",["Wants are unlimited, resources limited","Money is printed","Prices are high","Taxes are high"],0,1],
+["Economics","Perfect competition has?",["One seller","Many sellers, homogeneous product","Two sellers","Government control"],1,1],
+["Economics","Equilibrium price is where?",["Demand = Supply","Demand > Supply","Supply = 0","Price = 0"],0,1],
+["Economics","Sales tax is a/an?",["Direct tax","Indirect tax","Income tax","Wealth tax"],1,1],
+["Economics","Reward of 'Land' as a factor of production?",["Wages","Rent","Interest","Profit"],1,1],
+["Economics","Reward of 'Labour'?",["Wages","Rent","Interest","Profit"],0,1],
+["Economics","Reward of 'Capital'?",["Wages","Rent","Interest","Profit"],2,1],
+["Economics","Deflation means?",["Rise in prices","Fall in general price level","No change","Rise in output"],1,0],
+// ---- Commerce ----
+["Commerce","A retailer sells goods to?",["Manufacturers","Final consumers","Wholesalers only","Government only"],1,1],
+["Commerce","Limited liability means shareholders are liable?",["Without limit","Up to unpaid value of shares","For all debts","Never"],1,1],
+["Commerce","Debentures are a form of?",["Owned capital","Loan capital","Drawings","Profit"],1,1],
+["Commerce","Cheapest transport for bulky goods?",["Air","Water","Road","Pipeline only"],1,0],
+["Commerce","A letter of credit is mainly used in?",["Foreign trade","Retail","Barter","Hobby"],0,1],
+["Commerce","E-commerce means?",["Buying and selling online","Electric trade","Export only","Banking only"],0,1],
+["Commerce","A partnership deed is a?",["Verbal promise","Written agreement","Tax form","Bank slip"],1,1],
+["Commerce","Barter system means?",["Goods for money","Goods for goods","Credit sales","Loan"],1,1],
+["Commerce","Which is an aid to trade?",["Banking","Farming","Mining","Weaving"],0,1],
+["Commerce","Which is NOT one of the 4 Ps of marketing?",["Product","Price","Profit","Promotion"],2,1],
+// ---- Statistics ----
+["Statistics","Mean of 5, 10, 15 = ?",["5","10","15","30"],1,1],
+["Statistics","Median of 2, 4, 6, 8 = ?",["4","5","6","8"],1,1],
+["Statistics","Mode of 1, 2, 2, 3 = ?",["1","2","3","None"],1,1],
+["Statistics","Probability of an impossible event?",["0","1","0.5","-1"],0,1],
+["Statistics","A pie chart mainly shows?",["Trends over time","Proportions of a whole","Correlation","Frequency of decimals"],1,1],
+["Statistics","Probability of an even number on a die?",["1/6","1/3","1/2","2/3"],2,1],
+["Statistics","A part of the population is called a?",["Sample","Census","Parameter","Index"],0,1],
+["Statistics","Correlation coefficient lies between?",["0 and 1","-1 and +1","0 and 100","-10 and 10"],1,1]
+]);
+
+window.EXTRA=(window.EXTRA||[]).concat([
+["Accounting","Capital equals?",["Assets - Liabilities","Assets + Liabilities","Liabilities - Assets","Assets x Liabilities"],0,1],
+["Accounting","Rule for real accounts?",["Debit receiver, credit giver","Debit what comes in, credit what goes out","Debit expenses, credit income","Debit giver, credit receiver"],1,1],
+["Accounting","Rule for personal accounts?",["Debit receiver, credit giver","Debit giver, credit receiver","Debit what goes out","Credit what comes in"],0,1],
+["Accounting","Credit sales are recorded: debit debtor, credit?",["Cash","Sales","Capital","Bank"],1,1],
+["Accounting","Opening entry is passed in the?",["Ledger","Journal","Trial balance","Balance sheet"],1,0],
+["Accounting","Petty cash book records?",["Large payments","Small expenses","Credit sales","Bank loans"],1,1],
+["Accounting","Discount allowed is a/an?",["Gain","Expense/loss","Asset","Liability"],1,1],
+["Accounting","Discount received is a/an?",["Gain","Loss","Asset","Capital"],0,1],
+["Accounting","Provision for doubtful debts is?",["Actual bad debt","Estimate of future bad debts","Asset","Income"],1,1],
+["Accounting","Reducing balance method charges depreciation on?",["Original cost","Book value","Scrap value","Sales"],1,1],
+["Accounting","Which is capital expenditure?",["Repairs","Purchase of machinery","Rent","Wages"],1,1],
+["Accounting","Which is revenue expenditure?",["Purchase of building","Repairs and maintenance","Purchase of land","Purchase of vehicle"],1,1],
+["Accounting","A contra entry involves?",["Cash and bank","Sales and purchases","Debtors and creditors","Stock and capital"],0,1],
+["Accounting","Suspense account is opened when?",["Trial balance does not agree","Cash is short","Stock is lost","Profit is high"],0,1],
+["Accounting","Quick ratio excludes?",["Cash","Debtors","Stock","Bank"],2,1],
+["Accounting","Cost of goods sold = ?",["Opening stock + Purchases - Closing stock","Sales - Purchases","Purchases + Sales","Closing stock - Opening stock"],0,1],
+["Accounting","Matching concept matches?",["Assets with liabilities","Revenue with related expenses","Cash with bank","Debit with credit"],1,1],
+["Accounting","Wages paid to install machinery are?",["Revenue expense","Capital expenditure","Drawings","Income"],1,0],
+["Accounting","Debtors are persons who?",["Owe money to the business","Are owed money by the business","Own the business","Lend to the bank"],0,1],
+["Accounting","Outstanding salaries are a?",["Asset","Liability","Income","Capital"],1,1],
+["Accounting","Receipts in the cash book are recorded on the?",["Credit side","Debit side","Either side","Neither"],1,1],
+["Accounting","Trading account finds?",["Net profit","Gross profit","Capital","Cash balance"],1,1],
+["Accounting","Profit and loss account finds?",["Gross profit","Net profit","Stock","Debtors"],1,1],
+["Business Math","25% of 80 = ?",["15","20","25","30"],1,1],
+["Business Math","Solve 3x - 7 = 11. x = ?",["4","5","6","7"],2,1],
+["Business Math","Square root of 144?",["10","11","12","14"],2,0],
+["Business Math","Area of a circle?",["2πr","πr²","πd²","2πr²"],1,1],
+["Business Math","CP 200, SP 250. Profit %?",["20%","25%","30%","50%"],1,1],
+["Business Math","CP 100, SP 80. Loss %?",["10%","20%","25%","80%"],1,1],
+["Business Math","Simple interest formula?",["PRT/100","P+R+T","PR/T","P(1+R)T"],0,1],
+["Business Math","Discount of 20% on Rs 250?",["20","40","50","60"],2,1],
+["Business Math","If x + y = 5 and x - y = 1, x = ?",["2","3","4","1"],1,1],
+["Business Math","Sum of 1 + 2 + ... + 10?",["45","50","55","60"],2,1],
+["Business Math","0! = ?",["0","1","Undefined","10"],1,1],
+["Business Math","5C2 = ?",["5","10","20","25"],1,1],
+["Business Math","log10(1000) = ?",["2","3","10","100"],1,1],
+["Business Math","(a + b)² = ?",["a² + b²","a² + 2ab + b²","a² - 2ab + b²","2a + 2b"],1,1],
+["Business Math","x² - 9 = ?",["(x-3)(x+3)","(x-9)(x+1)","(x-3)²","(x+3)²"],0,1],
+["Business Math","Percentage increase from 50 to 75?",["25%","50%","75%","30%"],1,1],
+["Business Math","60 km in 2 hours. Speed?",["20 km/h","30 km/h","60 km/h","120 km/h"],1,0],
+["Business Math","Mean of 4, 8, 12, 16?",["8","10","12","14"],1,0],
+["Business Math","1/2 : 1/3 = ?",["2:3","3:2","1:6","6:1"],1,0],
+["Business Math","a^m x a^n = ?",["a^(mn)","a^(m+n)","a^(m-n)","2a^(m+n)"],1,1],
+["Economics","Macroeconomics studies?",["Single firm","Whole economy","Single consumer","One market"],1,1],
+["Economics","Tea and coffee are?",["Complements","Substitutes","Inferior goods","Public goods"],1,1],
+["Economics","Car and petrol are?",["Substitutes","Complements","Luxuries","Free goods"],1,1],
+["Economics","Cost-push inflation is caused by?",["Rising production costs","Falling demand","Higher savings","Lower taxes"],0,1],
+["Economics","GNP = GDP + ?",["Net factor income from abroad","Taxes","Imports","Exports"],0,1],
+["Economics","Monopolistic competition has?",["One seller","Many sellers, differentiated products","Two sellers","No sellers"],1,1],
+["Economics","Law of diminishing returns relates to?",["Production","Consumption","Taxation","Banking"],0,1],
+["Economics","Fixed cost?",["Changes with output","Does not change with output","Is zero","Is profit"],1,1],
+["Economics","Total revenue = ?",["Price x Quantity","Price + Quantity","Cost x Quantity","Profit - Cost"],0,1],
+["Economics","Per capita income = ?",["National income / Population","Population / Income","Income x Population","Income - Tax"],0,1],
+["Economics","Balance of trade = ?",["Exports - Imports","Imports - Exports","Exports + Imports","Exports x Imports"],0,1],
+["Economics","Seasonal unemployment occurs in?",["Agriculture","Banking","Defence","Education only"],0,0],
+["Economics","Elasticity of perfectly elastic demand?",["0","1","Infinity","-1"],2,0],
+["Economics","Economics studies how society uses?",["Unlimited resources","Scarce resources","Free resources only","Gold only"],1,1],
+["Economics","Government spending and taxation form?",["Fiscal policy","Monetary policy","Trade policy","Labour policy"],0,1],
+["Commerce","A wholesaler sells mainly to?",["Retailers","Consumers only","Farmers","Banks"],0,1],
+["Commerce","A document sent with goods showing price and quantity?",["Invoice","Cheque","Receipt book","Policy"],0,1],
+["Commerce","A crossed cheque can be?",["Cashed over the counter","Deposited only into a bank account","Torn","Used twice"],1,1],
+["Commerce","A joint stock company is a?",["Separate legal entity","Partnership","Sole trader","Informal group"],0,1],
+["Commerce","A stock exchange deals in?",["Shares and securities","Cars","Grain","Clothes"],0,1],
+["Commerce","Insurance premium is?",["Amount paid to the insurer","Compensation received","Bank loan","Tax"],0,1],
+["Commerce","Customs duty is levied on?",["Imports and exports","Local sales","Salaries","Property"],0,1],
+["Commerce","A bill of lading is used in?",["Sea transport","Banking","Retail","Advertising"],0,1],
+["Commerce","Insurable interest is needed in?",["All insurance contracts","Barter","Retail only","Exports only"],0,1],
+["Commerce","Public sector enterprises are owned by?",["Government","Private persons","Foreigners only","Partners"],0,1],
+["Commerce","A franchise gives the right to?",["Use a brand and business model","Print money","Collect tax","Own land"],0,1],
+["Commerce","A credit card lets you?",["Buy now, pay later","Withdraw only","Avoid bills forever","Open a company"],0,0],
+["Commerce","Life insurance pays on?",["Death or maturity","Theft","Fire","Accident only to cars"],0,1],
+["Commerce","Mail order business sells goods through?",["Post/online orders","Shops only","Auctions only","Barter"],0,0],
+["Commerce","The main aim of a business is to?",["Earn profit by satisfying customers","Avoid tax","Close early","Hire fewer staff"],0,0],
+["Statistics","Mean of 12, 15, 18, 21?",["15","16.5","18","17"],1,1],
+["Statistics","Median of 7, 3, 9, 1, 5?",["3","5","7","9"],1,1],
+["Statistics","Range of 4, 9, 15?",["9","11","15","19"],1,1],
+["Statistics","Standard deviation can never be?",["Zero","Negative","Positive","Small"],1,1],
+["Statistics","Sample space of tossing a coin twice has how many outcomes?",["2","3","4","8"],2,1],
+["Statistics","Probability of a sure event?",["0","0.5","1","2"],2,1],
+["Statistics","Bar charts are used to?",["Compare categories","Show correlation only","Show area","Plot equations"],0,1],
+["Statistics","Quartiles divide data into?",["2 parts","3 parts","4 parts","10 parts"],2,1],
+["Statistics","Skewness measures?",["Asymmetry","Spread","Center","Size"],0,1],
+["Statistics","Variance of a constant?",["1","0","Constant","Infinity"],1,0],
+["English","Synonym of 'Fragile'?",["Strong","Breakable","Heavy","Solid"],1,1],
+["English","Antonym of 'Rigid'?",["Stiff","Flexible","Hard","Fixed"],1,1],
+["English","Each of the boys ___ a book.",["have","has","are","were"],1,1],
+["English","Correct spelling?",["Neccessary","Necessary","Necesary","Necessery"],1,1],
+["English","He ___ studying since morning.",["is","has been","was","will"],1,1],
+["English","One who loves mankind is a?",["Misanthrope","Philanthropist","Pessimist","Egoist"],1,1],
+["English","'Hit the nail on the head' means?",["Be violent","Be exactly right","Make noise","Repair"],1,1],
+["English","She is afraid ___ dogs.",["from","of","with","by"],1,1],
+["English","Synonym of 'Diligent'?",["Lazy","Hardworking","Careless","Slow"],1,1],
+["English","Active voice of 'The cat was chased by the dog'?",["The dog chased the cat","The cat chased the dog","The dog is chasing","The cat chases the dog"],0,1],
+["GK","Plants absorb which gas for photosynthesis?",["Oxygen","Carbon dioxide","Nitrogen","Hydrogen"],1,0],
+["GK","Capital of Australia?",["Sydney","Melbourne","Canberra","Perth"],2,0],
+["GK","First woman Prime Minister of Pakistan?",["Benazir Bhutto","Fatima Jinnah","Begum Raana","Maryam Nawaz"],0,1],
+["GK","Chemical symbol of gold?",["Ag","Au","Gd","Go"],1,0],
+["GK","Pakistan Day is celebrated on?",["14 August","23 March","6 September","25 December"],1,1]
+]);
+
+</script>
+<script>
+/* ============ QUESTION BANK ============
+Format: [subject, question, [A,B,C,D], correctIndex(0-3), expected(1 = is saal zyada expected, 0 = normal)]
+Subjects: "GK", "English", "Accounting", "Business Math", "Economics", "Commerce", "Statistics"
+Naye sawal bas isi format me neeche add kar do. Comma lagana mat bhoolna. */
+const Q = [
+// ---- GK ----
+["GK","Capital of Pakistan?",["Karachi","Lahore","Islamabad","Quetta"],2,1],
+["GK","Who is the founder of Pakistan?",["Allama Iqbal","M.A. Jinnah","Liaquat Ali Khan","Sir Syed"],1,1],
+["GK","Pakistan came into being on?",["14 Aug 1947","23 Mar 1940","15 Aug 1947","6 Sep 1965"],0,1],
+["GK","Highest peak of Pakistan?",["Nanga Parbat","K2","Rakaposhi","Tirich Mir"],1,1],
+["GK","National poet of Pakistan?",["Faiz","Ghalib","Allama Iqbal","Jigar"],2,1],
+["GK","Longest river of Pakistan?",["Ravi","Indus","Jhelum","Chenab"],1,0],
+["GK","Largest province of Pakistan by area?",["Punjab","Sindh","KPK","Balochistan"],3,0],
+["GK","Pakistan's national language?",["Sindhi","Urdu","Punjabi","English"],1,0],
+["GK","Resolution of Pakistan was passed in?",["1930","1940","1947","1935"],1,1],
+["GK","Headquarters of the United Nations?",["Geneva","London","New York","Paris"],2,0],
+["GK","How many continents are there?",["5","6","7","8"],2,0],
+["GK","Largest planet of the solar system?",["Earth","Jupiter","Saturn","Mars"],1,0],
+["GK","Currency of Japan?",["Yuan","Won","Yen","Dollar"],2,0],
+["GK","Karachi University was established in?",["1951","1947","1960","1972"],0,1],
+["GK","First Governor General of Pakistan?",["Liaquat Ali Khan","M.A. Jinnah","Khawaja Nazimuddin","Ghulam Muhammad"],1,0],
+["GK","SBP stands for?",["State Bank of Pakistan","Sindh Bank Pvt","Small Business Plan","Saving Bank Pool"],0,1],
+["GK","Which is the largest ocean?",["Atlantic","Indian","Pacific","Arctic"],2,0],
+["GK","CPEC connects Gwadar with?",["Kabul","Kashgar (China)","Tehran","Delhi"],1,1],
+["GK","Smallest province of Pakistan by area?",["Sindh","KPK","Punjab","Balochistan"],1,0],
+["GK","Who wrote the national anthem of Pakistan?",["Hafeez Jalandhari","Faiz","Iqbal","Sahir"],0,0],
+// ---- English ----
+["English","Choose the synonym of 'Rapid'.",["Slow","Quick","Weak","Late"],1,1],
+["English","Choose the antonym of 'Generous'.",["Kind","Selfish","Brave","Rich"],1,1],
+["English","She ___ to school every day.",["go","goes","going","gone"],1,1],
+["English","He is ___ honest man.",["a","an","the","no article"],1,1],
+["English","Plural of 'Child' is?",["Childs","Childes","Children","Childrens"],2,0],
+["English","Past tense of 'Write'?",["Writed","Wrote","Written","Writing"],1,0],
+["English","Choose the correct spelling.",["Recieve","Receive","Receeve","Recive"],1,1],
+["English","I have been waiting ___ two hours.",["since","for","from","at"],1,1],
+["English","Antonym of 'Ancient'?",["Old","Modern","Historic","Past"],1,0],
+["English","Synonym of 'Abundant'?",["Scarce","Plentiful","Rare","Little"],1,0],
+["English","If I ___ rich, I would help the poor.",["am","was","were","be"],2,1],
+["English","The meaning of 'Procrastinate' is?",["To hurry","To delay","To finish","To plan"],1,1],
+["English","Neither of the boys ___ present.",["are","were","is","have"],2,0],
+["English","Passive of 'He writes a letter'.",["A letter is written by him","A letter was written by him","A letter wrote him","He is written"],0,1],
+["English","One who knows everything is?",["Omnipotent","Omniscient","Omnipresent","Optimist"],1,1],
+["English","Idiom 'Break the ice' means?",["Destroy ice","Start a conversation","Get angry","Feel cold"],1,1],
+["English","He is senior ___ me.",["than","to","from","with"],1,0],
+["English","Choose the noun.",["Quickly","Beautiful","Happiness","Run"],2,0],
+["English","The book is ___ the table.",["in","on","at","by"],1,0],
+["English","Antonym of 'Victory'?",["Win","Defeat","Success","Gain"],1,0],
+// ---- Accounting ----
+["Accounting","Accounting equation is?",["A = L + C","A = L - C","A + L = C","C = A + L"],0,1],
+["Accounting","Double entry system means every transaction has?",["One debit only","Debit and equal credit","Two credits","Two debits"],1,1],
+["Accounting","Which is a current asset?",["Land","Building","Cash","Machinery"],2,1],
+["Accounting","Goodwill is a/an ___ asset.",["Tangible","Intangible","Current","Fictitious"],1,1],
+["Accounting","Trial balance checks?",["Profit","Arithmetical accuracy","Cash","Stock"],1,1],
+["Accounting","Rent paid is an item of?",["Asset","Liability","Expense","Capital"],2,0],
+["Accounting","Gross Profit = ",["Sales - COGS","Sales + COGS","Sales - Expenses","Net Profit - Expense"],0,1],
+["Accounting","Depreciation is charged on?",["Current assets","Fixed assets","Liabilities","Capital"],1,1],
+["Accounting","Drawings decrease?",["Capital","Assets","Sales","Purchases"],0,0],
+["Accounting","Journal is the book of?",["Final entry","Original (first) entry","Ledger","Cash only"],1,0],
+["Accounting","Bank overdraft is a?",["Current liability","Asset","Income","Capital"],0,0],
+["Accounting","Closing stock appears in?",["Trial balance only","Balance sheet and trading account","Cash book","Journal only"],1,0],
+// ---- Business Math ----
+["Business Math","Simple Interest on Rs 1000 at 10% for 2 years?",["100","200","300","1200"],1,1],
+["Business Math","20% of 500 = ?",["50","100","150","200"],1,1],
+["Business Math","If CP = 80 and SP = 100, profit % = ?",["20%","25%","30%","10%"],1,1],
+["Business Math","Value of 2^5 = ?",["10","25","32","16"],2,0],
+["Business Math","Solve: 3x + 6 = 15. x = ?",["2","3","4","5"],1,1],
+["Business Math","Average of 10, 20, 30 = ?",["10","20","30","60"],1,1],
+["Business Math","Ratio 15:25 in simplest form?",["3:5","5:3","1:2","2:3"],0,0],
+["Business Math","Log10(100) = ?",["1","2","10","100"],1,1],
+["Business Math","Discount on Rs 500 at 10% = ?",["25","50","100","10"],1,0],
+["Business Math","Sum of first 5 natural numbers?",["10","15","20","25"],1,0],
+["Business Math","Nth term of AP = ?",["a+(n-1)d","a+nd","ar^(n-1)","a-nd"],0,1],
+["Business Math","If x² = 49, x = ?",["7","±7","49","14"],1,0],
+// ---- Economics ----
+["Economics","Law of demand: price rises, quantity demanded?",["Rises","Falls","Constant","Doubles"],1,1],
+["Economics","Economics is the study of?",["Scarcity and choice","Only money","Only banks","Only trade"],0,1],
+["Economics","GDP stands for?",["Gross Domestic Product","General Domestic Price","Gross Data Plan","Grand Dollar Product"],0,1],
+["Economics","Inflation means?",["Fall in prices","General rise in prices","No change in prices","Rise in jobs"],1,1],
+["Economics","Opportunity cost is?",["Money spent","Next best alternative given up","Total cost","Profit"],1,1],
+["Economics","Market with one seller is?",["Monopoly","Oligopoly","Perfect competition","Duopoly"],0,1],
+["Economics","Father of Economics?",["Keynes","Adam Smith","Marshall","Marx"],1,1],
+["Economics","Microeconomics deals with?",["Whole economy","Individual units","Only govt","Only exports"],1,0],
+["Economics","Which is a factor of production?",["Land","Tax","Bond","Loan"],0,0],
+["Economics","Demand curve slopes?",["Upward","Downward","Vertical","Horizontal"],1,0],
+// ---- Commerce ----
+["Commerce","Trade means?",["Production","Buying and selling of goods","Transport","Insurance"],1,1],
+["Commerce","Sole proprietorship is owned by?",["One person","Two persons","Govt","Shareholders"],0,1],
+["Commerce","Minimum partners in a partnership (Pakistan)?",["1","2","7","10"],1,1],
+["Commerce","Bill of Exchange is drawn by?",["Drawer (creditor)","Drawee","Banker","Govt"],0,1],
+["Commerce","Insurance is a contract of?",["Profit","Indemnity","Loan","Sale"],1,1],
+["Commerce","A cheque is drawn on?",["A bank","A shop","Govt","Insurance co."],0,1],
+["Commerce","Share capital belongs to?",["Partnership","Joint stock company","Sole trader","Cooperative only"],1,0],
+["Commerce","Warehousing creates ___ utility.",["Time","Form","Place","Personal"],0,1],
+["Commerce","Central Bank of Pakistan?",["HBL","SBP","NBP","UBL"],1,0],
+["Commerce","Advertising is part of?",["Production","Promotion","Banking","Insurance"],1,0],
+// ---- Statistics ----
+["Statistics","Mean of 2, 4, 6, 8 = ?",["4","5","6","8"],1,1],
+["Statistics","Median of 3, 5, 9 = ?",["3","5","9","17"],1,1],
+["Statistics","Mode is the value that occurs?",["Least","Most often","Never","Once"],1,1],
+["Statistics","Range = ?",["Max - Min","Max + Min","Mean - Mode","Sum/n"],0,1],
+["Statistics","Probability always lies between?",["0 and 1","-1 and 1","0 and 100","1 and 10"],0,1],
+["Statistics","Square root of variance is?",["Mean","Standard deviation","Median","Range"],1,1],
+["Statistics","Data collected first-hand is?",["Primary","Secondary","Tertiary","Raw only"],0,0],
+["Statistics","Graph of frequency using bars with no gaps?",["Histogram","Pie chart","Ogive","Line graph"],0,0],
+["Statistics","Probability of a head in a fair coin toss?",["1","0.5","0.25","0"],1,0],
+["Statistics","Sum of all deviations from mean is?",["Zero","One","Positive","Negative"],0,0]
+];
+
+Q.push(...(window.EXTRA||[]));
+/* ============ TEST SETTINGS ============ */
+const TEST_RULES = {GK:20, English:20, commerceTotal:60};
+const COMMERCE = ["Accounting","Business Math","Economics","Commerce","Statistics"];
+const MINUTES = 60;          // test ka total time (minutes) – yahan badal sakte ho
+const NEG_MARK = 0;          // galat jawab pe minus (0 = nahi, 0.25 = ek chautai)
+const EXPECTED_BOOST = 3;    // expected sawal ka random chance kitna zyada ho
+
+const $ = s => document.querySelector(s);
+const app = $("#app");
+let T = null, tick = null;
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+// Weighted random pick: expected questions zyada chance se aate hain
+function weightedPick(pool,n){
+  const out=[],p=pool.slice();
+  while(out.length<n && p.length){
+    const w=p.map(q=>q[4]?EXPECTED_BOOST:1),tot=w.reduce((a,b)=>a+b,0);
+    let r=Math.random()*tot,i=0;
+    while(r>=w[i]){r-=w[i];i++}
+    out.push(p.splice(i,1)[0]);
+  }
+  return out;
+}
+function buildTest(){
+  const pick=s=>weightedPick(Q.filter(q=>q[0]===s),TEST_RULES[s]);
+  const com=weightedPick(Q.filter(q=>COMMERCE.includes(q[0])),TEST_RULES.commerceTotal);
+  // har sawal ke options bhi shuffle
+  return [...pick("GK"),...pick("English"),...com].map(q=>{
+    const idx=shuffle([0,1,2,3].slice(0,q[2].length));
+    return {s:q[0],q:q[1],o:idx.map(i=>q[2][i]),a:idx.indexOf(q[3]),x:q[4]};
+  });
+}
+
+function home(){
+  clearInterval(tick);
+  const cnt={};Q.forEach(q=>cnt[q[0]]=(cnt[q[0]]||0)+1);
+  app.innerHTML=`<h1>KU Entry Test Practice</h1>
+  <p class="tag">BBA / BSPA – Karachi University | GK 20 · English 20 · Commerce 60 = 100 MCQs</p>
+  <div class="card"><h2>📖 Study Mode</h2><p>Browse questions with answers and memorise them.</p>
+  <select id="sub"><option value="all">All subjects</option>${[...new Set(Q.map(q=>q[0]))].map(s=>`<option>${s}</option>`).join("")}</select>
+  <label><input type="checkbox" id="exp"> ★ Expected only</label><br>
+  <button onclick="study()">Start studying</button></div>
+  <div class="card"><h2>📝 Mock Test</h2><p>${MINUTES} minutes, random questions (★ expected ones appear more often). The test submits automatically when time is up.</p>
+  <button onclick="startTest()">Start test</button></div>
+  <div class="card tag">The bank has ${Q.length} questions. A full 100-question test needs at least 20 GK, 20 English and 60 commerce questions. Add more inside the <b>EXTRA</b> lists in index.html.<br>${Object.entries(cnt).map(([k,v])=>k+": "+v).join(" · ")}</div>`;
+}
+
+function study(){
+  const s=$("#sub").value,e=$("#exp").checked;
+  const list=Q.filter(q=>(s==="all"||q[0]===s)&&(!e||q[4]));
+  app.innerHTML=`<button class="ghost" onclick="home()">← Back</button><h1>Study (${list.length})</h1>`+
+  list.map((q,i)=>`<div class="card"><span class="tag">${q[0]} ${q[4]?'<span class="star">★ expected</span>':''}</span>
+  <p><b>${i+1}. ${q[1]}</b></p>${q[2].map((o,j)=>`<div>${"ABCD"[j]}. ${o}${j===q[3]?' ✅':''}</div>`).join("")}</div>`).join("");
+}
+
+function startTest(){
+  const qs=buildTest();
+  T={qs,ans:Array(qs.length).fill(null),cur:0,end:Date.now()+MINUTES*60000,done:false};
+  tick=setInterval(()=>{
+    const left=Math.max(0,T.end-Date.now());
+    const el=$("#tm");
+    if(el){const m=Math.floor(left/60000),s=Math.floor(left%60000/1000);el.textContent=`${m}:${String(s).padStart(2,"0")}`;el.classList.toggle("low",left<5*60000)}
+    if(left<=0)finish(true);
+  },500);
+  render();
+}
+function render(){
+  if(T.done)return;
+  const q=T.qs[T.cur];
+  app.innerHTML=`<div class="bar"><span>Q ${T.cur+1}/${T.qs.length}</span><span class="timer" id="tm"></span><button onclick="confirmFinish()">Submit</button></div>
+  <div class="card"><span class="tag">${q.s}</span><p><b>${q.q}</b></p>
+  ${q.o.map((o,j)=>`<button class="opt ${T.ans[T.cur]===j?'sel':''}" onclick="pick(${j})">${"ABCD"[j]}. ${o}</button>`).join("")}
+  <button class="ghost" onclick="go(-1)">← Previous</button><button class="ghost" onclick="clr()">Clear</button><button onclick="go(1)">Next →</button></div>
+  <div class="nav">${T.qs.map((_,i)=>`<button class="${T.ans[i]!==null?'done':''} ${i===T.cur?'cur':''}" onclick="T.cur=${i};render()">${i+1}</button>`).join("")}</div>`;
+}
+function pick(j){T.ans[T.cur]=j;render()}
+function clr(){T.ans[T.cur]=null;render()}
+function go(d){T.cur=Math.min(T.qs.length-1,Math.max(0,T.cur+d));render()}
+function confirmFinish(){
+  const un=T.ans.filter(a=>a===null).length;
+  if(confirm(un?`${un} question(s) still unanswered. Submit anyway?`:"Submit the test?"))finish(false);
+}
+function finish(timeUp){
+  if(T.done)return;T.done=true;clearInterval(tick);
+  let ok=0,bad=0,skip=0;const by={};
+  T.qs.forEach((q,i)=>{
+    by[q.s]=by[q.s]||{t:0,c:0};by[q.s].t++;
+    if(T.ans[i]===null)skip++;else if(T.ans[i]===q.a){ok++;by[q.s].c++}else bad++;
+  });
+  const score=ok-bad*NEG_MARK;
+  app.innerHTML=`<h1>Result ${timeUp?'<span class="tag">(time up)</span>':''}</h1>
+  <div class="card"><div class="big">${score} / ${T.qs.length}</div>
+  <p>✅ Correct: ${ok} · ❌ Wrong: ${bad} · ⏭ Skipped: ${skip} · ${Math.round(score/T.qs.length*100)}%</p>
+  ${Object.entries(by).map(([s,v])=>`<div>${s}: ${v.c}/${v.t}</div>`).join("")}
+  <button onclick="startTest()">Retake test</button><button class="ghost" onclick="home()">Home</button></div>
+  <h2>Review</h2>`+T.qs.map((q,i)=>`<div class="card"><span class="tag">${q.s} ${q.x?'<span class="star">★</span>':''}</span>
+  <p><b>${i+1}. ${q.q}</b></p>${q.o.map((o,j)=>`<div class="opt ${j===q.a?'ok':(j===T.ans[i]?'no':'')}" style="padding:6px 10px">${"ABCD"[j]}. ${o}${j===q.a?' ✅':''}${j===T.ans[i]&&j!==q.a?' ❌ (your answer)':''}</div>`).join("")}</div>`).join("");
+  window.scrollTo(0,0);
+}
+window.addEventListener("beforeunload",e=>{if(T&&!T.done){e.preventDefault();e.returnValue=""}});
+home();
+</script>
+</body>
+</html>
